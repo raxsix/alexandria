@@ -101,11 +101,16 @@ public class BookService extends IntentService {
 
             final String ISBN_PARAM = "isbn:" + ean;
 
+            Log.d("TEST", ean);
+            Log.d("TEST", ISBN_PARAM);
+
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(QUERY_PARAM, ISBN_PARAM)
                     .build();
 
             URL url = new URL(builtUri.toString());
+
+            Log.d("TEST", url.toString());
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
