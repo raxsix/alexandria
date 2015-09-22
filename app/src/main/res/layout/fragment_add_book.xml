@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/scan_button"
+                android:contentDescription="@string/scan_the_book"
                 android:id="@+id/scan_button"/>
 
         </LinearLayout>
@@ -104,6 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:text="@string/cancel_button"
+                android:contentDescription="@string/cancel_button"
                 android:layout_weight="1"
                 style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/delete_button"
@@ -118,6 +120,7 @@
                 android:visibility="invisible"
                 android:layout_weight="1"
                 android:id="@+id/save_button"
+                android:contentDescription="@string/save_button"
                 android:drawableLeft="@drawable/ic_action_accept"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_gravity="bottom"
