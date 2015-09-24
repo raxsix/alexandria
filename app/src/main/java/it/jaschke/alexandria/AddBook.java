@@ -112,7 +112,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 // are using an external app.
                 //when you're done, remove the toast below.
 
-                IntentIntegrator scanIntegrator = new com.google.zxing.integration.android.IntentIntegrator(getActivity());
+                IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
                 scanIntegrator.initiateScan();
 
             }
