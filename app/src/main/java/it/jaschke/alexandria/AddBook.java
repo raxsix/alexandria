@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -18,8 +19,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import it.jaschke.alexandria.api.LoaderCallback;
-import it.jaschke.alexandria.com.google.zxing.integration.android.IntentIntegrator;
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.services.DownloadImage;
@@ -30,22 +32,35 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private EditText ean;
     private final int LOADER_ID = 1;
     private View rootView;
-    private final String EAN_CONTENT = "eanContent";
+    private static final String EAN_CONTENT = "eanContent";
     private static final String SCAN_FORMAT = "scanFormat";
     private static final String SCAN_CONTENTS = "scanContents";
 
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
 
+    private static String eanString;
 
     public AddBook() {
+    }
+
+    public static AddBook newInstance(String scanContents) {
+        AddBook fragment = new AddBook();
+        Bundle args = new Bundle();
+        if (scanContents != null) {
+            args.putString(EAN_CONTENT, scanContents);
+            fragment.setArguments(args);
+        }
+        return fragment;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (ean != null) {
-            outState.putString(EAN_CONTENT, ean.getText().toString());
+
+        // Save the state of the EAN
+        if (eanString != null) {
+            outState.putString(EAN_CONTENT, eanString);
         }
     }
 
@@ -97,8 +112,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 // are using an external app.
                 //when you're done, remove the toast below.
 
-                IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
-
+                IntentIntegrator scanIntegrator = new com.google.zxing.integration.android.IntentIntegrator(getActivity());
                 scanIntegrator.initiateScan();
 
             }
@@ -107,7 +121,10 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Snackbar.make(rootView, "Book with ISBN: " + ean.getText().toString() + " is added", Snackbar.LENGTH_LONG)
+                        .show();
                 ean.setText("");
+                eanString = null;
             }
         });
 
@@ -119,12 +136,32 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
                 ean.setText("");
+                eanString = null;
             }
         });
 
+
+        Bundle args = getArguments();
+        if (args != null) {
+            String eanText = args.getString(EAN_CONTENT);
+            // EAN is read by the scanner
+            eanString = eanText;
+            // EAN is set only once
+            args.putString(EAN_CONTENT, null);
+
+            if (eanString != null) {
+                ean.setText(eanString);
+                ean.requestFocus();
+            }
+        }
+
         if (savedInstanceState != null) {
-            ean.setText(savedInstanceState.getString(EAN_CONTENT));
-            ean.setHint("");
+            String eanText = savedInstanceState.getString(EAN_CONTENT);
+
+            if (eanText != null) {
+                ean.setText(eanText);
+                ean.setHint("");
+            }
         }
 
         return rootView;
@@ -200,6 +237,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.bookCover).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.delete_button).setVisibility(View.INVISIBLE);
+        eanString = null;
     }
 
     @Override
