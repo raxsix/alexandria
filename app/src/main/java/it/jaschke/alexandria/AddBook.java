@@ -121,7 +121,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(rootView, "Book with ISBN: " + ean.getText().toString() + " is added", Snackbar.LENGTH_LONG)
+                Snackbar.make(rootView, getActivity().getString(R.string.book_added), Snackbar.LENGTH_LONG)
                         .show();
                 ean.setText("");
                 eanString = null;
