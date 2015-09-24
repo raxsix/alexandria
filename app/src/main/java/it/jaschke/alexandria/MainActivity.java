@@ -23,7 +23,7 @@ import it.jaschke.alexandria.com.google.zxing.integration.android.IntentIntegrat
 import it.jaschke.alexandria.com.google.zxing.integration.android.IntentResult;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, Callback {
+public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, Callback {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
