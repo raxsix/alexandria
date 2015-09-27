@@ -140,7 +140,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             }
         });
 
-
         Bundle args = getArguments();
         if (args != null) {
             String eanText = args.getString(EAN_CONTENT);
